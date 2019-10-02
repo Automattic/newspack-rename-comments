@@ -1,4 +1,4 @@
-=== Plugin Name ===
+=== Newspack Rename Comments ===
 Contributors: automattic, philipjohn
 Tags: comments
 Requires at least: 5.2
