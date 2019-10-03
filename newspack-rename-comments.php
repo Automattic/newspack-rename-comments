@@ -92,6 +92,23 @@ function admin_init() {
 		]
 	);
 
+	// "No comments"
+	add_settings_field(
+		'comments_no_comments',
+		esc_html__( 'No comments', 'rename-comments' ),
+		__NAMESPACE__ . '\field_comments_no_comments',
+		'discussion',
+		'rename_comments'
+	);
+	register_setting(
+		'discussion',
+		'rc_comments_no_comments',
+		[
+			'type' => 'string',
+			'sanitise_callback' => 'esc_html',
+		]
+	);
+
 	// Heading (no comments)
 	add_settings_field(
 		'no_comments_title',
@@ -176,8 +193,6 @@ function filter_gettext( $translated_text, $text = '', $context = '', $domain = 
 
 	// Let's explicitly match our strings.
 	if ( in_array( $translated_text, array_keys( $strings_to_translate ) ) ) {
-		error_log( 'Transforming ' . $translated_text );
-		error_log( var_export( $strings_to_translate[ $translated_text ], true ) );
 		return $strings_to_translate[ $translated_text ];
 	}
 
@@ -244,6 +259,18 @@ function field_comments_comments_closed() {
 }
 
 /**
+ * Output for the "No comments" field
+ * @return void
+ */
+function field_comments_no_comments() {
+	$value = get_option( 'rc_comments_no_comments' );
+	?>
+	<p><label for="comments_no_comments"><?php esc_html_e( 'This text will replace the "No comments" message.', 'rename-comments' ); ?></label></p>
+	<p><input id="comments_no_comments" name="rc_comments_no_comments" value="<?php echo esc_attr( $value ) ?>" /></p>
+	<?php
+}
+
+/**
  * Output for the No Comments Title field
  * @return void
  */
@@ -277,4 +304,30 @@ function get_text( $id ) {
 	if ( $value ) {
 		return $value;
 	}
+	return false;
 }
+
+add_filter( 'newspack_comment_section_title_nocomments', function( $text ) {
+	error_log( var_export( get_text( 'rc_no_comments_title' ), true ) );
+	return ( get_text( 'rc_no_comments_title' ) ) ? get_text( 'rc_no_comments_title' ) : $text;
+} );
+
+add_filter( 'newspack_comment_section_title', function( $text ) {
+	return ( get_text( 'rc_comments_title' ) ) ? get_text( 'rc_comments_title' ) : $text;
+} );
+
+add_filter( 'newspack_comments_name_plural', function( $text ) {
+	return ( get_text( 'rc_comments_name_plural' ) ) ? get_text( 'rc_comments_name_plural' ) : $text;
+} );
+
+add_filter( 'newspack_comments_leave_comment', function( $text ) {
+	return ( get_text( 'rc_comments_leave_comment' ) ) ? get_text( 'rc_comments_leave_comment' ) : $text;
+} );
+
+add_filter( 'newspack_comments_closed', function( $text ) {
+	return ( get_text( 'rc_comments_comments_closed' ) ) ? get_text( 'rc_comments_comments_closed' ) : $text;
+} );
+
+add_filter( 'newspack_no_comments', function( $text ) {
+	return ( get_text( 'rc_comments_no_comments' ) ) ? get_text( 'rc_comments_no_comments' ) : $text;
+} );
