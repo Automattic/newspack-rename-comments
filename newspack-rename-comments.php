@@ -331,3 +331,19 @@ add_filter( 'newspack_comments_closed', function( $text ) {
 add_filter( 'newspack_no_comments', function( $text ) {
 	return ( get_text( 'rc_comments_no_comments' ) ) ? get_text( 'rc_comments_no_comments' ) : $text;
 } );
+
+add_filter( 'newspack_number_comments', function ( $text ) {
+	$replacements = 0;
+
+	$new_text = str_replace( 'Comments', get_text( 'rc_comments_name_plural' ), $text, $replacements );
+	if ( 0 < $replacements ) {
+		return $new_text;
+	}
+
+	$new_text = str_replace( 'Comment', get_text( 'rc_comments_name' ), $text, $replacements );
+	if ( 0 < $replacements ) {
+		return $new_text;
+	}
+
+	return $text;
+} );
