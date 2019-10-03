@@ -193,7 +193,9 @@ function filter_gettext( $translated_text, $text = '', $context = '', $domain = 
 
 	// Let's explicitly match our strings.
 	if ( in_array( $translated_text, array_keys( $strings_to_translate ) ) ) {
-		return $strings_to_translate[ $translated_text ];
+		if ( ! empty( $strings_to_translate[ $translated_text ] ) ) {
+			return $strings_to_translate[ $translated_text ];
+		}
 	}
 
 	return $translated_text;
