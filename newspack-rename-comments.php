@@ -173,6 +173,11 @@ add_action( 'init', __NAMESPACE__ . '\remove_meta_from_comment' );
  */
 function filter_gettext( $translated_text, $text = '', $context = '', $domain = '' ) {
 
+	// Only replace on the frontend.
+	if ( \is_admin() ) {
+		return $translated_text;
+	}
+
 	// A specific list of strings we want to change.
 	$strings_to_translate = [
 		'Comment' => get_text( 'rc_comments_name' ),
