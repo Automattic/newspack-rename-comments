@@ -315,7 +315,6 @@ function get_text( $id ) {
 }
 
 add_filter( 'newspack_comment_section_title_nocomments', function( $text ) {
-	error_log( var_export( get_text( 'rc_no_comments_title' ), true ) );
 	return ( get_text( 'rc_no_comments_title' ) ) ? get_text( 'rc_no_comments_title' ) : $text;
 } );
 
