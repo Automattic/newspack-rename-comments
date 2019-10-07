@@ -173,6 +173,11 @@ add_action( 'init', __NAMESPACE__ . '\remove_meta_from_comment' );
  */
 function filter_gettext( $translated_text, $text = '', $context = '', $domain = '' ) {
 
+	// Only replace on the frontend.
+	if ( \is_admin() ) {
+		return $translated_text;
+	}
+
 	// A specific list of strings we want to change.
 	$strings_to_translate = [
 		'Comment' => get_text( 'rc_comments_name' ),
@@ -310,7 +315,6 @@ function get_text( $id ) {
 }
 
 add_filter( 'newspack_comment_section_title_nocomments', function( $text ) {
-	error_log( var_export( get_text( 'rc_no_comments_title' ), true ) );
 	return ( get_text( 'rc_no_comments_title' ) ) ? get_text( 'rc_no_comments_title' ) : $text;
 } );
 
