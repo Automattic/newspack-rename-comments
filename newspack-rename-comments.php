@@ -143,6 +143,22 @@ function admin_init() {
 		]
 	);
 
+	// Blurb
+	add_settings_field(
+		'comments_blurb',
+		esc_html__( 'Blurb text above comment form', 'rename-comments' ),
+		__NAMESPACE__ . '\field_comments_blurb',
+		'discussion',
+		'rename_comments'
+	);
+	register_setting(
+		'discussion',
+		'rc_comments_blurb',
+		[
+			'type' => 'string',
+			'sanitise_callback' => 'wp_kses_post',
+		]
+	);
 }
 add_action( 'admin_init', __NAMESPACE__ . '\admin_init' );
 
@@ -302,6 +318,18 @@ function field_comments_title() {
 }
 
 /**
+ * Output for the Comments Blurb field
+ * @return void
+ */
+function field_comments_blurb() {
+	$value = get_option( 'rc_comments_blurb' );
+	?>
+	<p><label for="comments_blurb"><?php esc_html_e( 'This will display some explainer or comment guidelines text above the comments form.', 'rename-comments' ); ?></label></p>
+	<p><textarea id="comments_blurb" name="rc_comments_blurb" rows="10" cols="50" class="large-text"><?php echo wp_kses_post( $value ); ?></textarea></p>
+	<?php
+}
+
+/**
  * Grabs the relevant text from the option and returns it for output
  * @param  strong $id Name of the option
  * @return string     The text to use in place of the default
@@ -352,4 +380,15 @@ add_filter( 'newspack_number_comments', function ( $text ) {
 	}
 
 	return $text;
+} );
+
+add_action( 'newspack_comments_above_comments', function() {
+	$value = get_option( 'rc_comments_blurb' );
+	if ( ! empty( trim( $value ) ) ) {
+		?>
+		<div class='rc_comments_blurb'>
+			<?php echo wp_kses_post( wpautop( $value ) ); ?>
+		</div>
+		<?php
+	}
 } );
