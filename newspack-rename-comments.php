@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Newspack Rename Comments
  * Description:       Provides the Newspack theme with the ability to allow users to rename comments.
- * Version:           0.1.0
+ * Version:           0.2.0
  * Author:            Philip John, Automattic
  * Author URI:        https://automattic.com
  * Text Domain:       rename-comments
